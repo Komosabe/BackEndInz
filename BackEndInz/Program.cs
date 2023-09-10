@@ -1,6 +1,13 @@
+using BackEndInz.Helpers;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<BackEndInzDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("BackEndInz")));
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
