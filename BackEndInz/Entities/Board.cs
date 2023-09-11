@@ -7,6 +7,9 @@
         public bool IsAutomated { get; set; }
 
 
+        public ICollection<BoardLabel> BoardLabels { get; set; }
+
+
         public ICollection<Column> Columns { get; set; }
 
 

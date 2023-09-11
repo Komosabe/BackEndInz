@@ -18,7 +18,7 @@
         public Column Column { get; set; }
 
 
-        public int UserId { get; set; }
+        public int CreatedById { get; set; }
         public User CreatedBy { get; set; }
 
 

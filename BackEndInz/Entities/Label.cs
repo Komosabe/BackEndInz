@@ -9,6 +9,9 @@
         public int Priority { get; set; }
 
 
+        public ICollection<BoardLabel> BoardLabels { get; set; }
+
+
         public ICollection<NoteLabel> NoteLabels { get; set; }
     }
 }
