@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackEndInz.Migrations
 {
     /// <inheritdoc />
-    public partial class test1 : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,26 +75,24 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "boardLabels",
+                name: "BoardLabel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BoardId = table.Column<int>(type: "int", nullable: false),
-                    LabelId = table.Column<int>(type: "int", nullable: false)
+                    BoardsId = table.Column<int>(type: "int", nullable: false),
+                    LabelsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_boardLabels", x => x.Id);
+                    table.PrimaryKey("PK_BoardLabel", x => new { x.BoardsId, x.LabelsId });
                     table.ForeignKey(
-                        name: "FK_boardLabels_boards_BoardId",
-                        column: x => x.BoardId,
+                        name: "FK_BoardLabel_boards_BoardsId",
+                        column: x => x.BoardsId,
                         principalTable: "boards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_boardLabels_labels_LabelId",
-                        column: x => x.LabelId,
+                        name: "FK_BoardLabel_labels_LabelsId",
+                        column: x => x.LabelsId,
                         principalTable: "labels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -122,45 +120,18 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "boardUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleInBoard = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BoardId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_boardUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_boardUsers_boards_BoardId",
-                        column: x => x.BoardId,
-                        principalTable: "boards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_boardUsers_users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "notes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     isDone = table.Column<bool>(type: "bit", nullable: false),
                     isImportant = table.Column<bool>(type: "bit", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ColumnId = table.Column<int>(type: "int", nullable: false),
-                    CreatedById = table.Column<int>(type: "int", nullable: false)
+                    ColumnId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -171,85 +142,89 @@ namespace BackEndInz.Migrations
                         principalTable: "columns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BoardUser",
+                columns: table => new
+                {
+                    BoardsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BoardUser", x => new { x.BoardsId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_notes_users_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_BoardUser_boards_BoardsId",
+                        column: x => x.BoardsId,
+                        principalTable: "boards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BoardUser_users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "noteLabels",
+                name: "NoteLabel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NoteId = table.Column<int>(type: "int", nullable: false),
-                    LabelId = table.Column<int>(type: "int", nullable: false)
+                    NotesId = table.Column<int>(type: "int", nullable: false),
+                    LabelsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_noteLabels", x => x.Id);
+                    table.PrimaryKey("PK_NoteLabel", x => new { x.NotesId, x.LabelsId });
                     table.ForeignKey(
-                        name: "FK_noteLabels_labels_LabelId",
-                        column: x => x.LabelId,
+                        name: "FK_NoteLabel_labels_LabelsId",
+                        column: x => x.LabelsId,
                         principalTable: "labels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_noteLabels_notes_NoteId",
-                        column: x => x.NoteId,
+                        name: "FK_NoteLabel_notes_NotesId",
+                        column: x => x.NotesId,
                         principalTable: "notes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "userNotes",
+                name: "UserNote",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    NoteId = table.Column<int>(type: "int", nullable: false)
+                    UsersId = table.Column<int>(type: "int", nullable: false),
+                    NotesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_userNotes", x => x.Id);
+                    table.PrimaryKey("PK_UserNote", x => new { x.UsersId, x.NotesId });
                     table.ForeignKey(
-                        name: "FK_userNotes_notes_NoteId",
-                        column: x => x.NoteId,
+                        name: "FK_UserNote_notes_NotesId",
+                        column: x => x.NotesId,
                         principalTable: "notes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_userNotes_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserNote_users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_boardLabels_BoardId",
-                table: "boardLabels",
-                column: "BoardId");
+                name: "IX_BoardLabel_LabelsId",
+                table: "BoardLabel",
+                column: "LabelsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_boardLabels_LabelId",
-                table: "boardLabels",
-                column: "LabelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_boardUsers_BoardId",
-                table: "boardUsers",
-                column: "BoardId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_boardUsers_UserId",
-                table: "boardUsers",
-                column: "UserId");
+                name: "IX_BoardUser_UsersId",
+                table: "BoardUser",
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_columns_BoardId",
@@ -257,14 +232,9 @@ namespace BackEndInz.Migrations
                 column: "BoardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_noteLabels_LabelId",
-                table: "noteLabels",
-                column: "LabelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_noteLabels_NoteId",
-                table: "noteLabels",
-                column: "NoteId");
+                name: "IX_NoteLabel_LabelsId",
+                table: "NoteLabel",
+                column: "LabelsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_notes_ColumnId",
@@ -272,19 +242,9 @@ namespace BackEndInz.Migrations
                 column: "ColumnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_notes_CreatedById",
-                table: "notes",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_userNotes_NoteId",
-                table: "userNotes",
-                column: "NoteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_userNotes_UserId",
-                table: "userNotes",
-                column: "UserId");
+                name: "IX_UserNote_NotesId",
+                table: "UserNote",
+                column: "NotesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_users_RoleInApplicationId",
@@ -296,16 +256,16 @@ namespace BackEndInz.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "boardLabels");
+                name: "BoardLabel");
 
             migrationBuilder.DropTable(
-                name: "boardUsers");
+                name: "BoardUser");
 
             migrationBuilder.DropTable(
-                name: "noteLabels");
+                name: "NoteLabel");
 
             migrationBuilder.DropTable(
-                name: "userNotes");
+                name: "UserNote");
 
             migrationBuilder.DropTable(
                 name: "labels");
@@ -314,16 +274,16 @@ namespace BackEndInz.Migrations
                 name: "notes");
 
             migrationBuilder.DropTable(
-                name: "columns");
-
-            migrationBuilder.DropTable(
                 name: "users");
 
             migrationBuilder.DropTable(
-                name: "boards");
+                name: "columns");
 
             migrationBuilder.DropTable(
                 name: "roleInApplications");
+
+            migrationBuilder.DropTable(
+                name: "boards");
         }
     }
 }

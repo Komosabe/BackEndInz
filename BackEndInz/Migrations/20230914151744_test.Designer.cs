@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndInz.Migrations
 {
     [DbContext(typeof(BackEndInzDbContext))]
-    [Migration("20230911183433_test1")]
-    partial class test1
+    [Migration("20230914151744_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,56 +43,6 @@ namespace BackEndInz.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("boards");
-                });
-
-            modelBuilder.Entity("BackEndInz.Entities.BoardLabel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BoardId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LabelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BoardId");
-
-                    b.HasIndex("LabelId");
-
-                    b.ToTable("boardLabels");
-                });
-
-            modelBuilder.Entity("BackEndInz.Entities.BoardUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BoardId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RoleInBoard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BoardId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("boardUsers");
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.Column", b =>
@@ -156,8 +106,9 @@ namespace BackEndInz.Migrations
                     b.Property<int>("ColumnId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -178,32 +129,7 @@ namespace BackEndInz.Migrations
 
                     b.HasIndex("ColumnId");
 
-                    b.HasIndex("CreatedById");
-
                     b.ToTable("notes");
-                });
-
-            modelBuilder.Entity("BackEndInz.Entities.NoteLabel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("LabelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NoteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LabelId");
-
-                    b.HasIndex("NoteId");
-
-                    b.ToTable("noteLabels");
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.RoleInApplication", b =>
@@ -249,65 +175,64 @@ namespace BackEndInz.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.UserNote", b =>
+            modelBuilder.Entity("BoardLabel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("BoardsId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("NoteId")
+                    b.Property<int>("LabelsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.HasKey("BoardsId", "LabelsId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("LabelsId");
 
-                    b.HasIndex("NoteId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("userNotes");
+                    b.ToTable("BoardLabel");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.BoardLabel", b =>
+            modelBuilder.Entity("BoardUser", b =>
                 {
-                    b.HasOne("BackEndInz.Entities.Board", "Board")
-                        .WithMany("BoardLabels")
-                        .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("BoardsId")
+                        .HasColumnType("int");
 
-                    b.HasOne("BackEndInz.Entities.Label", "Label")
-                        .WithMany("BoardLabels")
-                        .HasForeignKey("LabelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Board");
+                    b.HasKey("BoardsId", "UsersId");
 
-                    b.Navigation("Label");
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("BoardUser");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.BoardUser", b =>
+            modelBuilder.Entity("NoteLabel", b =>
                 {
-                    b.HasOne("BackEndInz.Entities.Board", "Board")
-                        .WithMany("BoardUsers")
-                        .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("NotesId")
+                        .HasColumnType("int");
 
-                    b.HasOne("BackEndInz.Entities.User", "User")
-                        .WithMany("BoardUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("LabelsId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Board");
+                    b.HasKey("NotesId", "LabelsId");
 
-                    b.Navigation("User");
+                    b.HasIndex("LabelsId");
+
+                    b.ToTable("NoteLabel");
+                });
+
+            modelBuilder.Entity("UserNote", b =>
+                {
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NotesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersId", "NotesId");
+
+                    b.HasIndex("NotesId");
+
+                    b.ToTable("UserNote");
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.Column", b =>
@@ -329,34 +254,7 @@ namespace BackEndInz.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackEndInz.Entities.User", "CreatedBy")
-                        .WithMany("CreatedNotes")
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Column");
-
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("BackEndInz.Entities.NoteLabel", b =>
-                {
-                    b.HasOne("BackEndInz.Entities.Label", "Label")
-                        .WithMany("NoteLabels")
-                        .HasForeignKey("LabelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEndInz.Entities.Note", "Note")
-                        .WithMany("NoteLabels")
-                        .HasForeignKey("NoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Label");
-
-                    b.Navigation("Note");
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.User", b =>
@@ -370,31 +268,68 @@ namespace BackEndInz.Migrations
                     b.Navigation("RoleInApplication");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.UserNote", b =>
+            modelBuilder.Entity("BoardLabel", b =>
                 {
-                    b.HasOne("BackEndInz.Entities.Note", "Note")
-                        .WithMany("UserNotes")
-                        .HasForeignKey("NoteId")
+                    b.HasOne("BackEndInz.Entities.Board", null)
+                        .WithMany()
+                        .HasForeignKey("BoardsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackEndInz.Entities.User", "User")
-                        .WithMany("UserNotes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("BackEndInz.Entities.Label", null)
+                        .WithMany()
+                        .HasForeignKey("LabelsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BoardUser", b =>
+                {
+                    b.HasOne("BackEndInz.Entities.Board", null)
+                        .WithMany()
+                        .HasForeignKey("BoardsId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Note");
+                    b.HasOne("BackEndInz.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("User");
+            modelBuilder.Entity("NoteLabel", b =>
+                {
+                    b.HasOne("BackEndInz.Entities.Label", null)
+                        .WithMany()
+                        .HasForeignKey("LabelsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackEndInz.Entities.Note", null)
+                        .WithMany()
+                        .HasForeignKey("NotesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserNote", b =>
+                {
+                    b.HasOne("BackEndInz.Entities.Note", null)
+                        .WithMany()
+                        .HasForeignKey("NotesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackEndInz.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.Board", b =>
                 {
-                    b.Navigation("BoardLabels");
-
-                    b.Navigation("BoardUsers");
-
                     b.Navigation("Columns");
                 });
 
@@ -403,32 +338,9 @@ namespace BackEndInz.Migrations
                     b.Navigation("Notes");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.Label", b =>
-                {
-                    b.Navigation("BoardLabels");
-
-                    b.Navigation("NoteLabels");
-                });
-
-            modelBuilder.Entity("BackEndInz.Entities.Note", b =>
-                {
-                    b.Navigation("NoteLabels");
-
-                    b.Navigation("UserNotes");
-                });
-
             modelBuilder.Entity("BackEndInz.Entities.RoleInApplication", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("BackEndInz.Entities.User", b =>
-                {
-                    b.Navigation("BoardUsers");
-
-                    b.Navigation("CreatedNotes");
-
-                    b.Navigation("UserNotes");
                 });
 #pragma warning restore 612, 618
         }

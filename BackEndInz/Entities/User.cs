@@ -7,16 +7,17 @@
         public string Password { get; set; }
 
 
-        public ICollection<BoardUser> BoardUsers { get; set; }
+        public ICollection<Board> Boards { get; set; }
     
     
         public int RoleInApplicationId { get; set; }
         public RoleInApplication RoleInApplication { get; set; }
     
-        
-        public ICollection<Note> CreatedNotes { get; set; }
+        //// Created by User notes
+        //public ICollection<Note> CreatedNotes { get; set; }
 
 
-        public ICollection<UserNote> UserNotes { get; set; }
+        // User Notes
+        public ICollection<Note> Notes { get; set; }
     }
 }
