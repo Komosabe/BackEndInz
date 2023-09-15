@@ -11,13 +11,13 @@
         public DateTime? EndDate { get; set; }
 
 
-        public ICollection<Label> Labels { get; set; }
+        public ICollection<Label>? Labels { get; set; }
     
 
-        public int ColumnId { get; set; }
-        public Column Column { get; set; }
+        public int? ColumnId { get; set; }
+        public Column? Column { get; set; }
 
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User>? Users { get; set; }
     }
 }

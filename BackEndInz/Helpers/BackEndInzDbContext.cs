@@ -64,25 +64,19 @@ namespace BackEndInz.Helpers
                     j => j.HasKey("UsersId", "NotesId"));
 
 
-            //// Configuration For Column
-            //modelBuilder.Entity<Column>()
-            //    .HasOne(c => c.Board)
-            //    .WithMany(t => t.Columns)
-            //    .HasForeignKey(c => c.BoardId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            // Configuration For Column
+            modelBuilder.Entity<Column>()
+                .HasOne(c => c.Board)
+                .WithMany(t => t.Columns)
+                .HasForeignKey(c => c.BoardId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //// Configuration for Note
-            //modelBuilder.Entity<Note>()
-            //    .HasOne(n => n.CreatedBy)
-            //    .WithMany(u => u.CreatedNotes)
-            //    .HasForeignKey(n => n.CreatedById)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<Note>()
-            //    .HasOne(n => n.Column)
-            //    .WithMany(c => c.Notes)
-            //    .HasForeignKey(n => n.ColumnId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            // Configuration For Note
+            modelBuilder.Entity<Note>()
+                .HasOne(n => n.Column)
+                .WithMany(c => c.Notes)
+                .HasForeignKey(n => n.ColumnId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

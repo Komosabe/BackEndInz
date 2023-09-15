@@ -10,6 +10,6 @@
         public Board Board { get; set; }
 
 
-        public ICollection<Note> Notes { get; set;}
+        public ICollection<Note>? Notes { get; set;}
     }
 }

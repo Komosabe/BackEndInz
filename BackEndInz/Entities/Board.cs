@@ -7,13 +7,12 @@
         public bool IsAutomated { get; set; }
 
 
-        //public ICollection<BoardLabel> BoardLabels { get; set; }
-        public ICollection<Label> Labels { get; set; }
+        public ICollection<Label>? Labels { get; set; }
 
 
-        public ICollection<Column> Columns { get; set; }
+        public ICollection<Column>? Columns { get; set; }
 
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User>? Users { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 using BackEndInz.Helpers;
+using BackEndInz.Interfaces;
+using BackEndInz.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,11 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BackEndInzDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("BackEndInz")));
 
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IBoardService, BoardService>();
 
 var app = builder.Build();
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndInz.Migrations
 {
     [DbContext(typeof(BackEndInzDbContext))]
-    [Migration("20230914151744_test")]
-    partial class test
+    [Migration("20230915092009_test1")]
+    partial class test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,18 +76,16 @@ namespace BackEndInz.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Color")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int?>("Priority")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -103,7 +101,7 @@ namespace BackEndInz.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ColumnId")
+                    b.Property<int?>("ColumnId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -165,7 +163,7 @@ namespace BackEndInz.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleInApplicationId")
+                    b.Property<int?>("RoleInApplicationId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -251,8 +249,7 @@ namespace BackEndInz.Migrations
                     b.HasOne("BackEndInz.Entities.Column", "Column")
                         .WithMany("Notes")
                         .HasForeignKey("ColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Column");
                 });
@@ -261,9 +258,7 @@ namespace BackEndInz.Migrations
                 {
                     b.HasOne("BackEndInz.Entities.RoleInApplication", "RoleInApplication")
                         .WithMany("Users")
-                        .HasForeignKey("RoleInApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleInApplicationId");
 
                     b.Navigation("RoleInApplication");
                 });
