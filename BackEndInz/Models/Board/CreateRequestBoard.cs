@@ -11,5 +11,6 @@ namespace BackEndInz.Models.Board
         [Required]
         public bool IsAutomated { get; set; }
 
+        //public ICollection<Entities.User>? Users { get; set; }
     }
 }

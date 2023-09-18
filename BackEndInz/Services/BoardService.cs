@@ -10,13 +10,17 @@ namespace BackEndInz.Services
     {
         private readonly IMapper _mapper;
         private BackEndInzDbContext _context;
+        private IUserService _userService;
+
 
         public BoardService(
             IMapper mapper,
-            BackEndInzDbContext context)
+            BackEndInzDbContext context,
+            IUserService userService)
         {
             _mapper = mapper;
             _context = context;
+            _userService = userService;
         }
 
         public IEnumerable<Board> GetAll()
@@ -41,6 +45,9 @@ namespace BackEndInz.Services
         {
             var board = getBoard(id);
 
+            if (model.UsersIds == null) board.Users = null;
+            else board.Users = _userService.GetUsersByIds(model.UsersIds);
+
             _mapper.Map(model, board);
             _context.boards.Update(board);
             _context.SaveChanges();
@@ -59,5 +66,6 @@ namespace BackEndInz.Services
             if (board == null) throw new KeyNotFoundException("Board not found");
             return board;
         }
+
     }
 }

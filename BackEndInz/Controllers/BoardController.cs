@@ -30,6 +30,8 @@ namespace BackEndInz.Controllers
             return Ok(board);
         }
 
+
+
         [HttpPost] // Create Board
         public IActionResult CreateBoard(CreateRequestBoard model)
         {

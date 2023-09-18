@@ -1,13 +1,18 @@
-﻿namespace BackEndInz.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace BackEndInz.Entities
 {
     public class User
     {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public int Id { get; set; } // 
+        public string Username { get; set; } // 
 
 
-        public ICollection<Board>? Boards { get; set; }
+        [JsonIgnore]
+        public string PasswordHash { get; set; } 
+
+
+        public ICollection<Board>? Boards { get; set; } 
     
     
         public int? RoleInApplicationId { get; set; }
