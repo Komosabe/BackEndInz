@@ -7,10 +7,5 @@ namespace BackEndInz.Models.Board
         [Required]
         [MinLength(3)]
         public string Title { get; set; }
-
-        [Required]
-        public bool IsAutomated { get; set; }
-
-        //public ICollection<Entities.User>? Users { get; set; }
     }
 }

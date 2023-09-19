@@ -3,7 +3,9 @@ using BackEndInz.Authorization;
 using BackEndInz.Entities;
 using BackEndInz.Helpers;
 using BackEndInz.Interfaces;
+using BackEndInz.Models.Board;
 using BackEndInz.Models.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEndInz.Services
 {
@@ -45,6 +47,15 @@ namespace BackEndInz.Services
         public User GetById(int id)
         {
             return getUser(id);
+        }
+
+        public GetModelUser GetViewById(int id)
+        {
+            var user = _context.users
+                    .Include(a => a.Boards)
+                    .FirstOrDefault(b => b.Id == id);
+            if (user == null) throw new KeyNotFoundException("User not found");
+            return _mapper.Map<GetModelUser>(user);
         }
 
         public void Register(RegisterRequest model)
@@ -99,7 +110,16 @@ namespace BackEndInz.Services
 
         private User getUser(int id)
         {
-            var user = _context.users.Find(id);
+            var user = _context.users
+                    .Include(b => b.Notes)
+                    .FirstOrDefault(b  => b.Id == id);
+
+            var boards = _context.boards
+                                    .Where(u => u.Users.Any(b => b.Id == id))
+                                    .ToList();
+
+            user.Boards = boards;
+
             if (user == null) throw new KeyNotFoundException("User not found");
             return user;
         }

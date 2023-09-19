@@ -30,6 +30,19 @@ namespace BackEndInz.Controllers
             return Ok(board);
         }
 
+        [HttpGet("{id}/View")] // Get by Id Board
+        public IActionResult GetView(int id)
+        {
+            var board = _boardService.GetViewById(id);
+            return Ok(board);
+        }
+
+        [HttpGet("{userId}/Boards")] // Get by UserId Boards
+        public IActionResult GetByUserIdBoards(int userId)
+        {
+            var boards = _boardService.GetByUserIdBoards(userId);
+            return Ok(boards);
+        }
 
 
         [HttpPost] // Create Board

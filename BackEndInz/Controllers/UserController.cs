@@ -3,6 +3,7 @@ using BackEndInz.Authorization;
 using BackEndInz.Helpers;
 using BackEndInz.Interfaces;
 using BackEndInz.Models.User;
+using BackEndInz.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -54,6 +55,13 @@ namespace BackEndInz.Controllers
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
+            return Ok(user);
+        }
+
+        [HttpGet("{id}/View")] // Get by Id Board
+        public IActionResult GetView(int id)
+        {
+            var user = _userService.GetViewById(id);
             return Ok(user);
         }
 

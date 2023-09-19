@@ -8,6 +8,8 @@ namespace BackEndInz.Interfaces
         IEnumerable<Board> GetAll();
         void Create(CreateRequestBoard model);
         Board GetById(int id);
+        GetModelBoard GetViewById(int id);
+        IEnumerable<Board> GetByUserIdBoards(int userId);
         void Update(int id, UpdateRequestBoard model);
         void Delete(int id);
     }

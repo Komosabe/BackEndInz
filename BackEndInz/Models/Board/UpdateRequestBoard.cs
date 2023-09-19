@@ -7,7 +7,6 @@ namespace BackEndInz.Models.Board
     {
         [MinLength(3)]
         public string Title { get; set; }
-        public bool? IsAutomated { get; set; }
 
 
         public ICollection<int>? UsersIds { get; set; }
