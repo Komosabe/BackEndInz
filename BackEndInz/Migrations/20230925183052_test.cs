@@ -18,27 +18,11 @@ namespace BackEndInz.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsAutomated = table.Column<bool>(type: "bit", nullable: false)
+                    LabelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_boards", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "labels",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_labels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,30 +59,6 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BoardLabel",
-                columns: table => new
-                {
-                    BoardsId = table.Column<int>(type: "int", nullable: false),
-                    LabelsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BoardLabel", x => new { x.BoardsId, x.LabelsId });
-                    table.ForeignKey(
-                        name: "FK_BoardLabel_boards_BoardsId",
-                        column: x => x.BoardsId,
-                        principalTable: "boards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BoardLabel_labels_LabelsId",
-                        column: x => x.LabelsId,
-                        principalTable: "labels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -130,6 +90,7 @@ namespace BackEndInz.Migrations
                     isImportant = table.Column<bool>(type: "bit", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LabelId = table.Column<int>(type: "int", nullable: true),
                     ColumnId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -168,27 +129,31 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NoteLabel",
+                name: "labels",
                 columns: table => new
                 {
-                    NotesId = table.Column<int>(type: "int", nullable: false),
-                    LabelsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: true),
+                    BoardId = table.Column<int>(type: "int", nullable: true),
+                    NoteId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NoteLabel", x => new { x.NotesId, x.LabelsId });
+                    table.PrimaryKey("PK_labels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NoteLabel_labels_LabelsId",
-                        column: x => x.LabelsId,
-                        principalTable: "labels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_labels_boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "boards",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NoteLabel_notes_NotesId",
-                        column: x => x.NotesId,
+                        name: "FK_labels_notes_NoteId",
+                        column: x => x.NoteId,
                         principalTable: "notes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -216,11 +181,6 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BoardLabel_LabelsId",
-                table: "BoardLabel",
-                column: "LabelsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BoardUser_UsersId",
                 table: "BoardUser",
                 column: "UsersId");
@@ -231,9 +191,18 @@ namespace BackEndInz.Migrations
                 column: "BoardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NoteLabel_LabelsId",
-                table: "NoteLabel",
-                column: "LabelsId");
+                name: "IX_labels_BoardId",
+                table: "labels",
+                column: "BoardId",
+                unique: true,
+                filter: "[BoardId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_labels_NoteId",
+                table: "labels",
+                column: "NoteId",
+                unique: true,
+                filter: "[NoteId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_notes_ColumnId",
@@ -255,19 +224,13 @@ namespace BackEndInz.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BoardLabel");
-
-            migrationBuilder.DropTable(
                 name: "BoardUser");
 
             migrationBuilder.DropTable(
-                name: "NoteLabel");
+                name: "labels");
 
             migrationBuilder.DropTable(
                 name: "UserNote");
-
-            migrationBuilder.DropTable(
-                name: "labels");
 
             migrationBuilder.DropTable(
                 name: "notes");

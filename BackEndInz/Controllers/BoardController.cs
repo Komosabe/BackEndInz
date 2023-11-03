@@ -1,4 +1,5 @@
-﻿using BackEndInz.Interfaces;
+﻿using BackEndInz.Authorization;
+using BackEndInz.Interfaces;
 using BackEndInz.Models.Board;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace BackEndInz.Controllers
             _boardService = boardService;
         }
 
+        //[Authorize]
         [HttpGet] // Get All Boards
         public IActionResult GetAllBoards()
         {
@@ -30,13 +32,14 @@ namespace BackEndInz.Controllers
             return Ok(board);
         }
 
-        [HttpGet("{id}/View")] // Get by Id Board
+        [HttpGet("{id}/ViewBoard")] // Get by Id Board
         public IActionResult GetView(int id)
         {
             var board = _boardService.GetViewById(id);
             return Ok(board);
         }
 
+        [Authorize]
         [HttpGet("{userId}/Boards")] // Get by UserId Boards
         public IActionResult GetByUserIdBoards(int userId)
         {
@@ -44,21 +47,21 @@ namespace BackEndInz.Controllers
             return Ok(boards);
         }
 
-
+        //[Authorize]
         [HttpPost] // Create Board
         public IActionResult CreateBoard(CreateRequestBoard model)
         {
             _boardService.Create(model);
             return Ok(new { message = "Board created" });
         }
-
+        [Authorize]
         [HttpPut("{id}")] // Update Board
         public IActionResult UpdateBoard(int id, UpdateRequestBoard model)
         {
             _boardService.Update(id, model);
             return Ok(new { message = "Board updated" });
         }
-
+        [Authorize]
         [HttpDelete("{id}")] // Delete Board
         public IActionResult DeleteBoard(int id)
         {

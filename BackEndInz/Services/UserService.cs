@@ -104,7 +104,7 @@ namespace BackEndInz.Services
         public ICollection<User> GetUsersByIds(ICollection<int> ids)
         {
             var users = _context.users.Where(u => ids.Contains(u.Id)).ToList();
-            if(users.Count <= 0) throw new KeyNotFoundException("No users");
+            //if(users.Count <= 0) throw new KeyNotFoundException("No users");
             return users;
         }
 

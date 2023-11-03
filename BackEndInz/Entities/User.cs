@@ -15,8 +15,8 @@ namespace BackEndInz.Entities
         public ICollection<Board>? Boards { get; set; } 
     
     
-        public int? RoleInApplicationId { get; set; }
-        public RoleInApplication? RoleInApplication { get; set; }
+        //public int? RoleInApplicationId { get; set; }
+        //public RoleInApplication? RoleInApplication { get; set; }
     
 
 

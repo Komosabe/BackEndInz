@@ -9,6 +9,6 @@ namespace BackEndInz.Models.Board
         public string Title { get; set; }
 
 
-        public ICollection<int>? UsersIds { get; set; }
+        //public ICollection<int>? UsersIds { get; set; }
     }
 }

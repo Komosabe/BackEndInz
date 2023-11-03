@@ -23,26 +23,36 @@ namespace BackEndInz.Helpers
         // Additional configurations for entity relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // BoardLabel
-            modelBuilder.Entity<Board>()
-                .HasMany(e => e.Labels)
-                .WithMany(e => e.Boards)
-                .UsingEntity(
-                    "BoardLabel",
-                    l => l.HasOne(typeof(Label)).WithMany().HasForeignKey("LabelsId").HasPrincipalKey(nameof(Label.Id)),
-                    r => r.HasOne(typeof(Board)).WithMany().HasForeignKey("BoardsId").HasPrincipalKey(nameof(Board.Id)),
-                    j => j.HasKey("BoardsId", "LabelsId"));
+            //// BoardLabel
+            //modelBuilder.Entity<Board>()
+            //    .HasMany(e => e.Labels)
+            //    .WithMany(e => e.Boards)
+            //    .UsingEntity(
+            //        "BoardLabel",
+            //        l => l.HasOne(typeof(Label)).WithMany().HasForeignKey("LabelsId").HasPrincipalKey(nameof(Label.Id)),
+            //        r => r.HasOne(typeof(Board)).WithMany().HasForeignKey("BoardsId").HasPrincipalKey(nameof(Board.Id)),
+            //        j => j.HasKey("BoardsId", "LabelsId"));
 
-            // NoteLabel
+            //// NoteLabel
+            //modelBuilder.Entity<Note>()
+            //    .HasMany(e => e.Labels)
+            //    .WithMany(e => e.Notes)
+            //    .UsingEntity(
+            //        "NoteLabel",
+            //        l => l.HasOne(typeof(Label)).WithMany().HasForeignKey("LabelsId").HasPrincipalKey(nameof(Label.Id)),
+            //        r => r.HasOne(typeof(Note)).WithMany().HasForeignKey("NotesId").HasPrincipalKey(nameof(Note.Id)),
+            //        j => j.HasKey("NotesId", "LabelsId"));
+
+            modelBuilder.Entity<Board>()
+                .HasOne(b => b.Label)
+                .WithOne(l => l.Board)
+                .HasForeignKey<Label>(l => l.BoardId);
+
             modelBuilder.Entity<Note>()
-                .HasMany(e => e.Labels)
-                .WithMany(e => e.Notes)
-                .UsingEntity(
-                    "NoteLabel",
-                    l => l.HasOne(typeof(Label)).WithMany().HasForeignKey("LabelsId").HasPrincipalKey(nameof(Label.Id)),
-                    r => r.HasOne(typeof(Note)).WithMany().HasForeignKey("NotesId").HasPrincipalKey(nameof(Note.Id)),
-                    j => j.HasKey("NotesId", "LabelsId"));
-            
+                .HasOne(n => n.Label)
+                .WithOne(l => l.Note)
+                .HasForeignKey<Label>(l => l.NoteId);
+
             //BoardUser
             modelBuilder.Entity<Board>()
                 .HasMany(e => e.Users)
@@ -78,6 +88,17 @@ namespace BackEndInz.Helpers
                 .HasForeignKey(n => n.ColumnId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+            modelBuilder.Entity<Column>()
+                .HasMany(c => c.Notes)
+                .WithOne(n => n.Column)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Note>()
+                .HasOne(n => n.Label)
+                .WithOne(l => l.Note)
+                .HasForeignKey<Label>(l => l.NoteId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

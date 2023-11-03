@@ -3,7 +3,6 @@ using BackEndInz.Entities;
 using BackEndInz.Helpers;
 using BackEndInz.Interfaces;
 using BackEndInz.Models.Board;
-using BackEndInz.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackEndInz.Services
@@ -38,20 +37,25 @@ namespace BackEndInz.Services
         public GetModelBoard GetViewById(int id)
         {
             var board = _context.boards
-                    .Include(a => a.Labels)
+                    .Include(a => a.Label)
                     .Include(b => b.Columns)
+                        .ThenInclude(c => c.Notes) 
                     .Include(c => c.Users)
                     .FirstOrDefault(b => b.Id == id);
+
             if (board == null) throw new KeyNotFoundException("Board not found");
+
             return _mapper.Map<GetModelBoard>(board);
         }
 
         public IEnumerable<Board> GetByUserIdBoards(int userId)
         {
             var boards = _context.boards
-                .Include(b => b.Users)
+                //.Include(b => b.Users)
+                //.Include(b => b.Label) ??????????????
                 .Where(b => b.Users.Any(u => u.Id == userId))
                 .ToList();
+
 
             return boards;
         }
@@ -68,8 +72,13 @@ namespace BackEndInz.Services
         {
             var board = getBoard(id);
 
-            if (model.UsersIds == null) board.Users = null;
-            else board.Users = _userService.GetUsersByIds(model.UsersIds);
+            if (board == null)
+            {
+                throw new ApplicationException("Board not found.");
+            }
+
+            //if (model.UsersIds == null) board.Users = null;
+            //else board.Users = _userService.GetUsersByIds(model.UsersIds);
 
             _mapper.Map(model, board);
             _context.boards.Update(board);
@@ -86,14 +95,14 @@ namespace BackEndInz.Services
         private Board getBoard(int id)
         {
             var board = _context.boards
-                    .Include(b => b.Labels)
+                    .Include(b => b.Label)
                     .Include(b => b.Columns)
                     .FirstOrDefault(b => b.Id == id);
 
 
             var users = _context.users
-                                .Where(u => u.Boards.Any(b => b.Id == id))
-                                .ToList();
+                    .Where(u => u.Boards.Any(b => b.Id == id))
+                    .ToList();
 
             board.Users = users;
 

@@ -58,7 +58,7 @@ namespace BackEndInz.Controllers
             return Ok(user);
         }
 
-        [HttpGet("{id}/View")] // Get by Id Board
+        [HttpGet("{id}/View")] // Get by Id 
         public IActionResult GetView(int id)
         {
             var user = _userService.GetViewById(id);

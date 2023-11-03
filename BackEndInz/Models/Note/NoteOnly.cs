@@ -1,6 +1,6 @@
-﻿namespace BackEndInz.Entities
+﻿namespace BackEndInz.Models.Note
 {
-    public class Note
+    public class NoteOnly
     {
         public int Id { get; set; }
         public string CreatedBy { get; set; }
@@ -9,15 +9,7 @@
         public bool isImportant { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-
-
-        public int? LabelId { get; set; } 
-        public Label Label { get; set; } 
-
-        public int? ColumnId { get; set; }
-        public Column? Column { get; set; }
-
-
-        public ICollection<User>? Users { get; set; }
+        public int? LabelId { get; set; }
+        public Models.Label.LabelOnly? Label { get; set; }
     }
 }
