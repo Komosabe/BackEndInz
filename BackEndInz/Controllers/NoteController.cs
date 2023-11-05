@@ -68,6 +68,13 @@ namespace BackEndInz.Controllers
             }
         }
 
+        [HttpGet("{columnId}/Notes")] // Get all notes for column
+        public IActionResult GetAllNotesForColumn(int columnId)
+        {
+            var notes = _noteService.GetAllNotesForColumn(columnId);
+            return Ok(notes);
+        }
+
         [HttpDelete("{id}")] // Delete Note
         public IActionResult DeleteNote(int id)
         {

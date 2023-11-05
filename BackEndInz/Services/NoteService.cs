@@ -74,6 +74,15 @@ namespace BackEndInz.Services
             return note;
         }
 
+        public IEnumerable<GetModelNote> GetAllNotesForColumn(int columnId)
+        {
+            var notes = _context.notes
+                .Where(a => a.ColumnId == columnId)
+                .ToList();
+
+            return _mapper.Map<IEnumerable<GetModelNote>>(notes);
+        }
+
         public void Delete(int id)
         {
             var note = getNote(id);
