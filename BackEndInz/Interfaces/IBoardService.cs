@@ -6,6 +6,7 @@ namespace BackEndInz.Interfaces
     public interface IBoardService
     {
         IEnumerable<Board> GetAll();
+        IEnumerable<GetModelBoard> GetViewAll();
         void Create(CreateRequestBoard model);
         Board GetById(int id);
         GetModelBoard GetViewById(int id);

@@ -3,6 +3,7 @@
     public class CreateRequestNote
     {
         public string CreatedBy { get; set; }
+        public string? Description { get; set; }
         public bool isDone { get; set; }
         public bool isImportant { get; set; }
         public DateTime? StartDate { get; set; }

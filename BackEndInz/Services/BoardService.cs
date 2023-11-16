@@ -29,6 +29,15 @@ namespace BackEndInz.Services
             return _context.boards;
         }
 
+        public IEnumerable<GetModelBoard> GetViewAll()
+        {
+            var boards = _context.boards
+                        .Include(a => a.Label)
+                        .ToList();
+
+            return boards.Select(b => _mapper.Map<GetModelBoard>(b));
+        }
+
         public Board GetById(int id)
         {
             return getBoard(id);

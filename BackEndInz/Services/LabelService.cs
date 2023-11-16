@@ -72,6 +72,20 @@ namespace BackEndInz.Services
             _context.SaveChanges();
         }
 
+        public void UpdateLabel(int labelId, UpdateRequestLabel model)
+        {
+            var label = getLabel(labelId);
+
+            if (label == null)
+            {
+                throw new ApplicationException("Label not found");
+            }
+
+            _mapper.Map(model, label);
+            _context.labels.Update(label);
+            _context.SaveChanges();
+        }
+
         public LabelOnly GetById(int id)
         {
             return getLabelModel(id);

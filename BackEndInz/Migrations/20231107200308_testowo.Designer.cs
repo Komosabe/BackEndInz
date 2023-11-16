@@ -4,6 +4,7 @@ using BackEndInz.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndInz.Migrations
 {
     [DbContext(typeof(BackEndInzDbContext))]
-    partial class BackEndInzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231107200308_testowo")]
+    partial class testowo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,10 +41,6 @@ namespace BackEndInz.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LabelId")
-                        .IsUnique()
-                        .HasFilter("[LabelId] IS NOT NULL");
 
                     b.ToTable("boards");
                 });
@@ -97,6 +96,14 @@ namespace BackEndInz.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BoardId")
+                        .IsUnique()
+                        .HasFilter("[BoardId] IS NOT NULL");
+
+                    b.HasIndex("NoteId")
+                        .IsUnique()
+                        .HasFilter("[NoteId] IS NOT NULL");
+
                     b.ToTable("labels");
                 });
 
@@ -118,9 +125,6 @@ namespace BackEndInz.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -139,10 +143,6 @@ namespace BackEndInz.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ColumnId");
-
-                    b.HasIndex("LabelId")
-                        .IsUnique()
-                        .HasFilter("[LabelId] IS NOT NULL");
 
                     b.ToTable("notes");
                 });
@@ -220,16 +220,6 @@ namespace BackEndInz.Migrations
                     b.ToTable("UserNote");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.Board", b =>
-                {
-                    b.HasOne("BackEndInz.Entities.Label", "Label")
-                        .WithOne("Board")
-                        .HasForeignKey("BackEndInz.Entities.Board", "LabelId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Label");
-                });
-
             modelBuilder.Entity("BackEndInz.Entities.Column", b =>
                 {
                     b.HasOne("BackEndInz.Entities.Board", "Board")
@@ -241,6 +231,22 @@ namespace BackEndInz.Migrations
                     b.Navigation("Board");
                 });
 
+            modelBuilder.Entity("BackEndInz.Entities.Label", b =>
+                {
+                    b.HasOne("BackEndInz.Entities.Board", "Board")
+                        .WithOne("Label")
+                        .HasForeignKey("BackEndInz.Entities.Label", "BoardId");
+
+                    b.HasOne("BackEndInz.Entities.Note", "Note")
+                        .WithOne("Label")
+                        .HasForeignKey("BackEndInz.Entities.Label", "NoteId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Board");
+
+                    b.Navigation("Note");
+                });
+
             modelBuilder.Entity("BackEndInz.Entities.Note", b =>
                 {
                     b.HasOne("BackEndInz.Entities.Column", "Column")
@@ -248,14 +254,7 @@ namespace BackEndInz.Migrations
                         .HasForeignKey("ColumnId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BackEndInz.Entities.Label", "Label")
-                        .WithOne("Note")
-                        .HasForeignKey("BackEndInz.Entities.Note", "LabelId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Column");
-
-                    b.Navigation("Label");
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.User", b =>
@@ -298,6 +297,8 @@ namespace BackEndInz.Migrations
             modelBuilder.Entity("BackEndInz.Entities.Board", b =>
                 {
                     b.Navigation("Columns");
+
+                    b.Navigation("Label");
                 });
 
             modelBuilder.Entity("BackEndInz.Entities.Column", b =>
@@ -305,12 +306,9 @@ namespace BackEndInz.Migrations
                     b.Navigation("Notes");
                 });
 
-            modelBuilder.Entity("BackEndInz.Entities.Label", b =>
+            modelBuilder.Entity("BackEndInz.Entities.Note", b =>
                 {
-                    b.Navigation("Board")
-                        .IsRequired();
-
-                    b.Navigation("Note")
+                    b.Navigation("Label")
                         .IsRequired();
                 });
 

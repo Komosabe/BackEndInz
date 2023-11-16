@@ -10,6 +10,7 @@ namespace BackEndInz.Interfaces
         void Delete(int id);
         LabelOnly GetById(int id);
         GetModelLabel GetLabelByBoardId(int boardId);
+        void UpdateLabel(int labelId, UpdateRequestLabel model);
         void AddLabelToNote(int noteId, CreateRequestLabelToNote model);
         GetModelLabel GetLabelByNoteId(int noteId);
     }

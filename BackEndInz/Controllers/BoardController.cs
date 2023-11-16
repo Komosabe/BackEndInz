@@ -25,6 +25,13 @@ namespace BackEndInz.Controllers
             return Ok(boards);
         }
 
+        [HttpGet("ViewAll")] // Get View All BoardsAll Boards
+        public IActionResult GetViewAllBoards()
+        {
+            var boards = _boardService.GetViewAll();
+            return Ok(boards);
+        }
+
         [HttpGet("{id}")] // Get by Id Board
         public IActionResult GetByIdBoard(int id)
         {

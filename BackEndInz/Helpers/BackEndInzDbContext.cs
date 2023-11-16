@@ -46,12 +46,15 @@ namespace BackEndInz.Helpers
             modelBuilder.Entity<Board>()
                 .HasOne(b => b.Label)
                 .WithOne(l => l.Board)
-                .HasForeignKey<Label>(l => l.BoardId);
+                .HasForeignKey<Label>(l => l.BoardId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Note>()
                 .HasOne(n => n.Label)
                 .WithOne(l => l.Note)
-                .HasForeignKey<Label>(l => l.NoteId);
+                .HasForeignKey<Label>(l => l.NoteId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             //BoardUser
             modelBuilder.Entity<Board>()
@@ -94,11 +97,45 @@ namespace BackEndInz.Helpers
                 .WithOne(n => n.Column)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //modelBuilder.Entity<Note>()
+            //    .HasOne(n => n.Label)
+            //    .WithOne(l => l.Note)
+            //    .HasForeignKey<Label>(l => l.NoteId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            // Konfiguracja między Board a Label
+            //modelBuilder.Entity<Board>()
+            //    .HasOne(b => b.Label)
+            //    .WithOne(l => l.Board)
+            //    .HasForeignKey<Label>(l => l.BoardId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+
+            // Konfiguracja między Note a Label
             modelBuilder.Entity<Note>()
                 .HasOne(n => n.Label)
                 .WithOne(l => l.Note)
                 .HasForeignKey<Label>(l => l.NoteId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Note>()
+                .HasOne(n => n.Label)
+                .WithOne(l => l.Note)
+                .HasForeignKey<Label>(l => l.NoteId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Usuwam Label -> LabelId dla Note i Board = Null
+            modelBuilder.Entity<Label>()
+                .HasOne(l => l.Board)
+                .WithOne(b => b.Label)
+                .HasForeignKey<Board>(b => b.LabelId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Label>()
+                .HasOne(l => l.Note)
+                .WithOne(n => n.Label)
+                .HasForeignKey<Note>(n => n.LabelId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

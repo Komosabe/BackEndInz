@@ -10,12 +10,6 @@ namespace BackEndInz.Controllers
     [Route("[controller]")]
     public class LabelController : Controller
     {
-        // to do
-        // Dodawanie do tablicy
-        // dodawanie do notatki
-        // usuwanie w tablicy
-        // dodawanie w tablicy
-    
         private readonly ILabelService _labelService;
 
         public LabelController(
@@ -79,6 +73,20 @@ namespace BackEndInz.Controllers
             {
                 _labelService.AddLabelToNote(noteId, model);
                 return Ok(new { message = "Label added to note successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("{id}")] // Edit Label
+        public IActionResult UpdateLabel(int id, UpdateRequestLabel model)
+        {
+            try
+            {
+                _labelService.UpdateLabel(id, model);
+                return Ok(new { message = "Label updated successfully" });
             }
             catch (Exception ex)
             {
