@@ -6,23 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackEndInz.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class _16112023test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "boards",
+                name: "labels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LabelId = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: true),
+                    BoardId = table.Column<int>(type: "int", nullable: true),
+                    NoteId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_boards", x => x.Id);
+                    table.PrimaryKey("PK_labels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,23 +43,23 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "columns",
+                name: "boards",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BoardId = table.Column<int>(type: "int", nullable: false)
+                    LabelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_columns", x => x.Id);
+                    table.PrimaryKey("PK_boards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_columns_boards_BoardId",
-                        column: x => x.BoardId,
-                        principalTable: "boards",
+                        name: "FK_boards_labels_LabelId",
+                        column: x => x.LabelId,
+                        principalTable: "labels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,27 +83,21 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "notes",
+                name: "columns",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    isDone = table.Column<bool>(type: "bit", nullable: false),
-                    isImportant = table.Column<bool>(type: "bit", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LabelId = table.Column<int>(type: "int", nullable: true),
-                    ColumnId = table.Column<int>(type: "int", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BoardId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_notes", x => x.Id);
+                    table.PrimaryKey("PK_columns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_notes_columns_ColumnId",
-                        column: x => x.ColumnId,
-                        principalTable: "columns",
+                        name: "FK_columns_boards_BoardId",
+                        column: x => x.BoardId,
+                        principalTable: "boards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -129,31 +127,36 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "labels",
+                name: "notes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: true),
-                    BoardId = table.Column<int>(type: "int", nullable: true),
-                    NoteId = table.Column<int>(type: "int", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isDone = table.Column<bool>(type: "bit", nullable: false),
+                    isImportant = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LabelId = table.Column<int>(type: "int", nullable: true),
+                    ColumnId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_labels", x => x.Id);
+                    table.PrimaryKey("PK_notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_labels_boards_BoardId",
-                        column: x => x.BoardId,
-                        principalTable: "boards",
-                        principalColumn: "Id");
+                        name: "FK_notes_columns_ColumnId",
+                        column: x => x.ColumnId,
+                        principalTable: "columns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_labels_notes_NoteId",
-                        column: x => x.NoteId,
-                        principalTable: "notes",
-                        principalColumn: "Id");
+                        name: "FK_notes_labels_LabelId",
+                        column: x => x.LabelId,
+                        principalTable: "labels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,6 +184,13 @@ namespace BackEndInz.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_boards_LabelId",
+                table: "boards",
+                column: "LabelId",
+                unique: true,
+                filter: "[LabelId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BoardUser_UsersId",
                 table: "BoardUser",
                 column: "UsersId");
@@ -191,23 +201,16 @@ namespace BackEndInz.Migrations
                 column: "BoardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_labels_BoardId",
-                table: "labels",
-                column: "BoardId",
-                unique: true,
-                filter: "[BoardId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_labels_NoteId",
-                table: "labels",
-                column: "NoteId",
-                unique: true,
-                filter: "[NoteId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_notes_ColumnId",
                 table: "notes",
                 column: "ColumnId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_notes_LabelId",
+                table: "notes",
+                column: "LabelId",
+                unique: true,
+                filter: "[LabelId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserNote_NotesId",
@@ -227,9 +230,6 @@ namespace BackEndInz.Migrations
                 name: "BoardUser");
 
             migrationBuilder.DropTable(
-                name: "labels");
-
-            migrationBuilder.DropTable(
                 name: "UserNote");
 
             migrationBuilder.DropTable(
@@ -246,6 +246,9 @@ namespace BackEndInz.Migrations
 
             migrationBuilder.DropTable(
                 name: "boards");
+
+            migrationBuilder.DropTable(
+                name: "labels");
         }
     }
 }
