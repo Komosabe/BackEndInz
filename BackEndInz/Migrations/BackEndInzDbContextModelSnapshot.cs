@@ -130,6 +130,10 @@ namespace BackEndInz.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("isDone")
                         .HasColumnType("bit");
 

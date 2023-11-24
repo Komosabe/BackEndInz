@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndInz.Migrations
 {
     [DbContext(typeof(BackEndInzDbContext))]
-    [Migration("20231116214024_16112023test")]
-    partial class _16112023test
+    [Migration("20231120121529_20112023")]
+    partial class _20112023
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,6 +132,10 @@ namespace BackEndInz.Migrations
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isDone")
                         .HasColumnType("bit");

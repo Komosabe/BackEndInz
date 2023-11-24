@@ -93,12 +93,14 @@ namespace BackEndInz.Helpers
                 {
                     Id = note.Id,
                     CreatedBy = note.CreatedBy,
+                    Description = note.Description,
+                    Title = note.Title,
                     CreatedDate = note.CreatedDate,
                     isDone = note.isDone,
                     isImportant = note.isImportant,
                     StartDate = note.StartDate,
                     EndDate = note.EndDate
-                })));
+                }))); ;
             #endregion
 
             #region Label
